@@ -27,3 +27,20 @@ al_folio:
 ```
 
 `al_folio_core` delegates `layout: distill` rendering to this plugin.
+
+## Vendored Distill runtime policy
+
+This gem ships prebuilt Distill runtime assets for end users (no npm step at gem install time).
+
+- Source of truth: `alshedivat/distillpub-template` (`al-folio` branch)
+- Sync script: `scripts/distill/sync_distill.sh`
+- Provenance metadata: `assets/js/distillpub/provenance.json`
+- Runtime safety policy: remote loader URLs are patched to local `/assets/js/distillpub/template.v2.js`
+
+Refresh vendored assets:
+
+```bash
+./scripts/distill/sync_distill.sh
+# or pin a specific ref
+./scripts/distill/sync_distill.sh <commit-sha>
+```

@@ -60,7 +60,7 @@
     integrity="{{ site.third_party_libraries.vanilla-cookieconsent.integrity.js }}"
     crossorigin="anonymous"
   ></script>
-  <script defer src="{{ '/assets/js/cookie-consent-setup.js' | relative_url }}"></script>
+  {% include plugins/al_cookie_consent_setup.liquid %}
 {% endif %}
 {% if site.plugins contains 'al_analytics' %}
   <!-- Analytics -->
