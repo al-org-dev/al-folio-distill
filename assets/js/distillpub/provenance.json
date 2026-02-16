@@ -1,16 +1,16 @@
 {
   "upstream_repo": "https://github.com/alshedivat/distillpub-template.git",
   "upstream_branch": "al-folio",
-  "upstream_ref": "a59ea36e4776ebc4cd1ce159b82cd0ec391b0ec3",
-  "upstream_ref_short": "a59ea36",
-  "synced_at_utc": "2026-02-15T20:21:28Z",
+  "upstream_ref": "d907ccdb526166c615f53487ec01e92e92f28f46",
+  "upstream_ref_short": "d907ccd",
+  "synced_at_utc": "2026-02-16T04:30:02Z",
   "toolchain": {
-    "node": "v25.6.1",
-    "npm": "11.9.0"
+    "sync_mode": "copy-dist-artifacts"
   },
-  "remote_loader_patched": true,
+  "remote_loader_patched": false,
   "assets": {
-    "template.v2.js": "2ac24800167f576873d51c47f885b32ebf085e2016e7c14d58728b825f3e2d0a",
-    "transforms.v2.js": "ae01a7ee2b59d9e8cdb9eb8d6b15a495634fd1e68534d1a5b184c17bb9230c01"
+    "template.v2.js": "4790831ced02f7c4f2009b2cdf6978ceda8351f0060d3b59dd9b3aab132e271a",
+    "transforms.v2.js": "70e3f488e23ec379d33a10a60311ec60b570b3b2d5f1823e9159f661c315184e",
+    "overrides.js": "74c9034c642cbfbaa0deafbee774aff044463ff117e700018d444a9d2901bb1e"
   }
 }

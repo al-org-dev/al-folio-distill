@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Rebuild vendored Distill runtime assets from a pinned upstream ref.
+# Sync vendored Distill runtime assets from a pinned upstream ref.
 #
 # Default upstream source:
 #   https://github.com/alshedivat/distillpub-template.git (branch: al-folio)
@@ -11,11 +11,11 @@ set -euo pipefail
 #
 # Examples:
 #   scripts/distill/sync_distill.sh
-#   scripts/distill/sync_distill.sh a59ea36e4776ebc4cd1ce159b82cd0ec391b0ec3
+#   scripts/distill/sync_distill.sh <commit-sha>
 
 UPSTREAM_REPO="${UPSTREAM_REPO:-https://github.com/alshedivat/distillpub-template.git}"
 UPSTREAM_BRANCH="${UPSTREAM_BRANCH:-al-folio}"
-DEFAULT_UPSTREAM_REF="a59ea36e4776ebc4cd1ce159b82cd0ec391b0ec3"
+DEFAULT_UPSTREAM_REF="d907ccdb526166c615f53487ec01e92e92f28f46"
 UPSTREAM_REF="${1:-${UPSTREAM_REF:-$DEFAULT_UPSTREAM_REF}}"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -33,18 +33,13 @@ pushd "${TMP_DIR}/distill-template" >/dev/null
 git fetch --quiet --depth 1 origin "${UPSTREAM_REF}"
 git checkout --quiet "${UPSTREAM_REF}"
 
-npm ci --silent
-npm run build --silent
-
 OUT_DIR="${ROOT}/assets/js/distillpub"
 mkdir -p "${OUT_DIR}"
 cp dist/template.v2.js "${OUT_DIR}/template.v2.js"
 cp dist/template.v2.js.map "${OUT_DIR}/template.v2.js.map"
 cp dist/transforms.v2.js "${OUT_DIR}/transforms.v2.js"
 cp dist/transforms.v2.js.map "${OUT_DIR}/transforms.v2.js.map"
-
-# Enforce self-contained runtime; no remote distill loader at runtime.
-perl -0pi -e "s#https://distill\\.pub/template\\.v2\\.js#/assets/js/distillpub/template.v2.js#g" "${OUT_DIR}/transforms.v2.js"
+cp dist/overrides.js "${OUT_DIR}/overrides.js"
 
 SOURCE_COMMIT="$(git rev-parse HEAD)"
 SOURCE_COMMIT_SHORT="$(git rev-parse --short HEAD)"
@@ -53,8 +48,6 @@ popd >/dev/null
 TEMPLATE_SHA256="$(shasum -a 256 "${OUT_DIR}/template.v2.js" | awk '{print $1}')"
 TRANSFORMS_SHA256="$(shasum -a 256 "${OUT_DIR}/transforms.v2.js" | awk '{print $1}')"
 SYNCED_AT_UTC="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-NODE_VERSION="$(node --version)"
-NPM_VERSION="$(npm --version)"
 
 cat > "${OUT_DIR}/provenance.json" <<JSON
 {
@@ -64,13 +57,13 @@ cat > "${OUT_DIR}/provenance.json" <<JSON
   "upstream_ref_short": "${SOURCE_COMMIT_SHORT}",
   "synced_at_utc": "${SYNCED_AT_UTC}",
   "toolchain": {
-    "node": "${NODE_VERSION}",
-    "npm": "${NPM_VERSION}"
+    "sync_mode": "copy-dist-artifacts"
   },
-  "remote_loader_patched": true,
+  "remote_loader_patched": false,
   "assets": {
     "template.v2.js": "${TEMPLATE_SHA256}",
-    "transforms.v2.js": "${TRANSFORMS_SHA256}"
+    "transforms.v2.js": "${TRANSFORMS_SHA256}",
+    "overrides.js": "$(shasum -a 256 "${OUT_DIR}/overrides.js" | awk '{print $1}')"
   }
 }
 JSON

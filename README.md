@@ -35,7 +35,8 @@ This gem ships prebuilt Distill runtime assets for end users (no npm step at gem
 - Source of truth: `alshedivat/distillpub-template` (`al-folio` branch)
 - Sync script: `scripts/distill/sync_distill.sh`
 - Provenance metadata: `assets/js/distillpub/provenance.json`
-- Runtime safety policy: remote loader URLs are patched to local `/assets/js/distillpub/template.v2.js`
+- Runtime parity policy: vendored runtime hashes are pinned to match `al-folio` `main`
+  snapshots carried by the upstream `al-folio` branch
 
 Refresh vendored assets:
 
