@@ -14064,18 +14064,15 @@
 window.addEventListener('WebComponentsReady', function() {
   console.warn('WebComponentsReady');
   const loaderTag = document.createElement('script');
-  loaderTag.src = '__AL_FOLIO_TEMPLATE_SRC__';
-  loaderTag.crossOrigin = 'anonymous';
+  loaderTag.src = 'https://distill.pub/template.v2.js';
   document.head.insertBefore(loaderTag, document.head.firstChild);
 });
 `;
 
   function render(dom) {
-    let templateSrc = "/assets/js/distillpub/template.v2.js";
     // pull out template script tag
     const templateTag = dom.querySelector('script[src*="template.v2.js"]');
     if (templateTag) {
-      templateSrc = templateTag.src || templateSrc;
       templateTag.parentNode.removeChild(templateTag);
     } else {
       console.debug("FYI: Did not find template tag when trying to remove it. You may not have added it. Be aware that our polyfills will add it.");
@@ -14088,7 +14085,7 @@ window.addEventListener('WebComponentsReady', function() {
 
     // add loader event listener to add tempalrte back in
     const addTag = dom.createElement("script");
-    addTag.innerHTML = addBackIn.replace("__AL_FOLIO_TEMPLATE_SRC__", templateSrc);
+    addTag.innerHTML = addBackIn;
     dom.head.insertBefore(addTag, dom.head.firstChild);
 
     // create polyfill script tag

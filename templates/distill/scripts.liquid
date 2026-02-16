@@ -52,15 +52,9 @@
 
 <!-- Removed Badges -->
 
-{% if site.enable_cookie_consent %}
+{% if site.enable_cookie_consent and site.plugins contains 'al_cookie' %}
   <!-- Cookie Consent -->
-  <script
-    defer
-    src="{{ site.third_party_libraries.vanilla-cookieconsent.url.js }}"
-    integrity="{{ site.third_party_libraries.vanilla-cookieconsent.integrity.js }}"
-    crossorigin="anonymous"
-  ></script>
-  <script defer src="{{ '/assets/js/cookie-consent-setup.js' | relative_url }}"></script>
+  {% include plugins/al_cookie_scripts.liquid %}
 {% endif %}
 {% if site.plugins contains 'al_analytics' %}
   <!-- Analytics -->
