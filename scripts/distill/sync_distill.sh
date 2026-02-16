@@ -4,7 +4,7 @@ set -euo pipefail
 # Sync vendored Distill runtime assets from a pinned upstream ref.
 #
 # Default upstream source:
-#   https://github.com/alshedivat/distillpub-template.git (branch: al-folio)
+#   https://github.com/al-org-dev/distill-template.git (branch: al-folio)
 #
 # Usage:
 #   scripts/distill/sync_distill.sh [upstream-ref]
@@ -13,7 +13,7 @@ set -euo pipefail
 #   scripts/distill/sync_distill.sh
 #   scripts/distill/sync_distill.sh <commit-sha>
 
-UPSTREAM_REPO="${UPSTREAM_REPO:-https://github.com/alshedivat/distillpub-template.git}"
+UPSTREAM_REPO="${UPSTREAM_REPO:-https://github.com/al-org-dev/distill-template.git}"
 UPSTREAM_BRANCH="${UPSTREAM_BRANCH:-al-folio}"
 DEFAULT_UPSTREAM_REF="d907ccdb526166c615f53487ec01e92e92f28f46"
 UPSTREAM_REF="${1:-${UPSTREAM_REF:-$DEFAULT_UPSTREAM_REF}}"

@@ -1,9 +1,9 @@
 {
-  "upstream_repo": "https://github.com/alshedivat/distillpub-template.git",
+  "upstream_repo": "https://github.com/al-org-dev/distill-template.git",
   "upstream_branch": "al-folio",
   "upstream_ref": "d907ccdb526166c615f53487ec01e92e92f28f46",
   "upstream_ref_short": "d907ccd",
-  "synced_at_utc": "2026-02-16T04:30:02Z",
+  "synced_at_utc": "2026-02-16T16:16:27Z",
   "toolchain": {
     "sync_mode": "copy-dist-artifacts"
   },

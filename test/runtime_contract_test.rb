@@ -41,7 +41,7 @@ class RuntimeContractTest < Minitest::Test
     manifest_path = ROOT.join("assets/js/distillpub/provenance.json")
     manifest = JSON.parse(manifest_path.read)
 
-    assert_equal "https://github.com/alshedivat/distillpub-template.git", manifest["upstream_repo"]
+    assert_equal "https://github.com/al-org-dev/distill-template.git", manifest["upstream_repo"]
     assert_equal "al-folio", manifest["upstream_branch"]
     refute_empty manifest["upstream_ref"].to_s
     assert_equal false, manifest["remote_loader_patched"]
