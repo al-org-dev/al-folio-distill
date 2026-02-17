@@ -27,6 +27,18 @@ class RuntimeContractTest < Minitest::Test
     assert_includes scripts_template, "{% include plugins/al_cookie_scripts.liquid %}"
   end
 
+  def test_distill_scripts_template_uses_tabs_js_not_legacy_minified_path
+    scripts_template = ROOT.join("templates/distill/scripts.liquid").read
+    assert_includes scripts_template, "/assets/js/tabs.js"
+    refute_includes scripts_template, "/assets/js/tabs.min.js"
+  end
+
+  def test_distill_scripts_template_uses_back_to_top_cdn_contract
+    scripts_template = ROOT.join("templates/distill/scripts.liquid").read
+    assert_includes scripts_template, "third_party_libraries['vanilla-back-to-top'].url.js"
+    refute_includes scripts_template, "/assets/js/vanilla-back-to-top.min.js"
+  end
+
   def test_runtime_hashes_match_al_folio_main_snapshot_contract
     template_hash = Digest::SHA256.file(ROOT.join("assets/js/distillpub/template.v2.js")).hexdigest
     transforms_hash = Digest::SHA256.file(ROOT.join("assets/js/distillpub/transforms.v2.js")).hexdigest
