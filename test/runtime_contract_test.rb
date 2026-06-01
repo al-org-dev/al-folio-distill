@@ -46,7 +46,7 @@ class RuntimeContractTest < Minitest::Test
 
     assert_equal "4790831ced02f7c4f2009b2cdf6978ceda8351f0060d3b59dd9b3aab132e271a", template_hash
     assert_equal "70e3f488e23ec379d33a10a60311ec60b570b3b2d5f1823e9159f661c315184e", transforms_hash
-    assert_equal "74c9034c642cbfbaa0deafbee774aff044463ff117e700018d444a9d2901bb1e", overrides_hash
+    assert_equal "41ce4a3744a9083e8913df1256432d2233ba16ff9b40c4878bdb3f35d73c0e8e", overrides_hash
   end
 
   def test_provenance_manifest_tracks_pinned_upstream_source
