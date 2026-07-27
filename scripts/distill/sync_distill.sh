@@ -49,6 +49,16 @@ TEMPLATE_SHA256="$(shasum -a 256 "${OUT_DIR}/template.v2.js" | awk '{print $1}')
 TRANSFORMS_SHA256="$(shasum -a 256 "${OUT_DIR}/transforms.v2.js" | awk '{print $1}')"
 SYNCED_AT_UTC="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
+# The upstream Polyfills transform re-injects the Distill runtime from a
+# hard-coded remote origin with no subresource integrity, which discards the
+# vendored copy we just pinned. Report the real state instead of assuming it.
+REMOTE_LOADER_URL="https://distill.pub/template.v2.js"
+if grep -qF "${REMOTE_LOADER_URL}" "${OUT_DIR}/transforms.v2.js"; then
+  REMOTE_LOADER_PATCHED="false"
+else
+  REMOTE_LOADER_PATCHED="true"
+fi
+
 cat > "${OUT_DIR}/provenance.json" <<JSON
 {
   "upstream_repo": "${UPSTREAM_REPO}",
@@ -59,7 +69,11 @@ cat > "${OUT_DIR}/provenance.json" <<JSON
   "toolchain": {
     "sync_mode": "copy-dist-artifacts"
   },
-  "remote_loader_patched": false,
+  "remote_loader_patched": ${REMOTE_LOADER_PATCHED},
+  "local_patches": [
+    "overrides.js: de-jQuery the load handler (\$(window).on('load', ...) -> window.addEventListener('load', ...)); jQuery is not loaded in al-folio v1. Port this upstream so the next sync preserves it.",
+    "transforms.v2.js: the Polyfills transform re-injected the runtime from a hard-coded remote distill.pub template URL with no SRI, discarding the vendored copy. It now re-injects window.alFolioDistill.templateLoader (vendored + integrity-pinned by default), falling back to the same-origin src of the tag it removed. Port this upstream so the next sync preserves it."
+  ],
   "assets": {
     "template.v2.js": "${TEMPLATE_SHA256}",
     "transforms.v2.js": "${TRANSFORMS_SHA256}",
@@ -70,3 +84,17 @@ JSON
 
 echo "Synced Distill runtime from ${UPSTREAM_REPO}@${SOURCE_COMMIT}"
 echo "Updated assets in ${OUT_DIR}"
+
+if [ "${REMOTE_LOADER_PATCHED}" = "false" ]; then
+  cat >&2 <<MSG
+
+ERROR: ${OUT_DIR}/transforms.v2.js still hard-codes ${REMOTE_LOADER_URL}.
+
+The synced ref reintroduced the unpinned remote Distill loader, so Distill pages
+would fetch the runtime from a third-party origin with no subresource integrity
+instead of the vendored copy. Land the loader patch listed under "local_patches"
+in ${UPSTREAM_REPO} (${UPSTREAM_BRANCH}) and re-sync, or re-apply it by hand and
+refresh the digests in provenance.json.
+MSG
+  exit 1
+fi

@@ -1,3 +1,4 @@
 /.bundle/
 /vendor/
+/node_modules/
 *.gem
